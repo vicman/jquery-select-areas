@@ -3,6 +3,10 @@
  * @author 360Learning
  * @author Catalin Dogaru (https://github.com/cdog - http://code.tutsplus.com/tutorials/how-to-create-a-jquery-image-cropping-plugin-from-scratch-part-i--net-20994)
  * @author Adrien David-Sivelle (https://github.com/AdrienDS - Refactoring, Multiselections & Mobile compatibility)
+ * @updates Victor Manuel Agudelo (victor.agudelo@enterdev.com.co)
+ * changelog 
+ * 2019-05-30: event onDelete,method focus (id)
+ * 
  */
 (function($) {
     $.imageArea = function(parent, id) {
@@ -424,11 +428,11 @@
                 $.each($resizeHandlers, function(card, $handler) {
                     $handler.remove();
                 });
-                if ($btDelete) {
-                    $btDelete.remove();    
-                } 
+                $btDelete.remove();
                 parent._remove(id);
                 fireEvent("changed");
+                fireEvent("deleted");
+                //alert('deleted');
             },
             getElementOffset = function (object) {
                 var offset = $(object).offset();
@@ -474,7 +478,7 @@
             .addClass("select-areas-background-area")
             .css({
                 background : "#fff url(" + $image.attr("src") + ") no-repeat",
-                backgroundSize : $image.width() + "px " + $image.height() + "px",
+                backgroundSize : $image.width() + "px",
                 position : "absolute"
             })
             .insertAfter($outline);
@@ -573,7 +577,8 @@
                 overlayOpacity: 0.5,
                 areas: [],
                 onChanging: null,
-                onChanged: null
+                onChanged: null,
+                onDeleted: null
             };
 
         this.options = $.extend(defaultOptions, customOptions);
@@ -598,6 +603,10 @@
         }
         if (this.options.onChanged) {
             this.$image.on("changed", this.options.onChanged);
+        }
+        
+        if (this.options.onDeleted) {
+            this.$image.on("deleted", this.options.onDeleted);
         }
         if (this.options.onLoaded) {
             this.$image.on("loaded", this.options.onLoaded);
@@ -774,7 +783,6 @@
         this.$trigger.remove();
         this.$image.css("width", "").css("position", "").unwrap();
         this.$image.removeData("mainImageSelectAreas");
-        this.$image.off('changing changed loaded');
     };
 
     $.imageSelectAreas.prototype.areas = function () {
@@ -818,6 +826,13 @@
             }
         });
         return res;
+    };
+    
+     $.imageSelectAreas.prototype.focus = function (id) {
+        if (this._areas[id]) {
+            //this._areas[id].deleteSelection();
+             this._areas[id].focus();
+        }
     };
 
     $.selectAreas = function(object, options) {

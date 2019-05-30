@@ -22,7 +22,8 @@ Best regards
       minSize: [30, 30],    // Minimum size of a selection
       maxSize: [400, 300],  // Maximum size of a selection
       onChanged: $.noop,    // fired when a selection is released
-      onChanging: $.noop    // fired during the modification of a selection
+      onChanging: $.noop,    // fired during the modification of a selection
+      onDeleted: $.noop    // fired during the item deletion
     });
 
 
@@ -68,6 +69,7 @@ Here is a list of available options for selectAreas, with their *default value*:
  - **areas** (*[]*) : list of areas to add to the image from the beginning  (id will be ignored)
  - **onChanging** (*null*) : triggered when the event "changing" is fired
  - **onChanged** (*null*) : triggered when the event "changed" is fired
+ - **onDeleted** (*null*) : triggered when the event "deleted" is fired
  - **onLoaded** (*null*) : triggered when the event "loaded" is fired
  - **width** (*0*) : When not 0, scale the image to this width (px). The coordinates of the areas on the full image can be retrieved with method relativeAreas()
 
@@ -76,6 +78,7 @@ Three events are fired by the plugin:
  - **loaded** : fired when plugin is loaded
  - **changing** : fired during the modification of a selection. arguments : (event, id, areas)
  - **changed**  : fired when a selection is released. arguments : (event, id, areas)
+ - **deleted**  : fired when a selection is deleted. arguments : (event, id, areas)
 
 ## Methods
 Once you added a *selectAreas* plugin on an image, several method are exposed to help you
@@ -88,3 +91,4 @@ manipulate and retrieve these areas:
  - **destroy ()** : remove the *selectAreas* plugin
  - **blurAll ()** : blur (unfocus) all the areas
  - **contains (point)** : return true or false whether or not a point ({x: X, y: Y}) is included in at least one area
+ - **focus (id)** : highlights an element by passing its id
